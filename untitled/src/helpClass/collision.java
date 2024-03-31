@@ -7,7 +7,6 @@ import java.awt.geom.Rectangle2D;
 public class collision {
 
 	public static boolean CanMoveHere(float x, float y, float width, float height, int[][] lvlData) {
-		// Check if any of the corners are in a solid tile. If none are, movement is possible.
 		return !(IsSolid(x, y, lvlData) ||
 				IsSolid(x + width, y, lvlData) ||
 				IsSolid(x, y + height, lvlData) ||
@@ -23,7 +22,6 @@ public class collision {
 
 		int value = lvlData[yIndex][xIndex];
 
-		// Assuming the interpretation is that 0, 2, and negative values are considered solid.
 		return value == 0 || value == 2 || value < 0;
 	}
 

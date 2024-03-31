@@ -132,25 +132,31 @@ public class InitPlayer extends Entity{
 		}
 
 		if (inAir) {
-			// Attempt vertical movement.
-			if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvl)) {
-				hitbox.y += airSpeed;
-				airSpeed += gravity;
+			// Temporarily calculate the next Y position without applying it.
+			float nextY = hitbox.y + airSpeed;
+			// Check if the entity can move to the next Y position.
+			if (CanMoveHere(hitbox.x, nextY, hitbox.width, hitbox.height, lvl)) {
+				// Apply the movement since there's no collision.
+				hitbox.y = nextY;
+				airSpeed += gravity; // Continue applying gravity if in air.
 			} else {
-				// Correct position upon collision and adjust airSpeed based on collision direction.
-				hitbox.y = GetEntityYPosUnderRoofOrAboveFloor(hitbox, airSpeed);
-				airSpeed = airSpeed > 0 ? 0 : fallSpeedAfterCollision; // Reset or set to collision fall speed.
-				resetInAirIfNeeded();
+				// Collision detected, adjust Y position and reset airSpeed accordingly.
+				if (airSpeed > 0) { // Falling down.
+					hitbox.y = GetEntityYPosUnderRoofOrAboveFloor(hitbox, airSpeed) - 1; // Adjust Y position, the "-1" might need tuning.
+				} else { // Moving up.
+					// For moving up, you might need a similar method that correctly positions the entity just below the ceiling it hits.
+				}
+				airSpeed = 0; // Stop vertical movement.
+				inAir = false; // The entity has landed or hit a ceiling, so it's not in air anymore.
 			}
 		}
 
-		// Update horizontal position if there's horizontal movement, or player is in air.
+		// Handle horizontal movement...
 		if (xSpeed != 0 || inAir) {
 			updateXPos(xSpeed);
 			moving = true;
 		}
 	}
-
 	private void jump() {
 		if (!inAir) {
 			inAir = true;

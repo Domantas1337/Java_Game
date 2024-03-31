@@ -20,7 +20,6 @@ public class LoadSave {
 	}
 
 	public static int[][] GetLevelData(File forData) {
-		System.out.println(forData);
 		if (forData.exists()) {
 			levelData =	readCSV(forData);
 			return levelData;
