@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
+
 import PlayerPack.InitPlayer;
 import helpClass.Constants;
 import helpClass.LoadSave;
@@ -117,29 +119,51 @@ public class ProjectileManager {
 
 	}
 
-	public void update() {
-		int i = 1;
-		for (Projectile p : projectiles) {
-			if (p.isActive()) {
-				p.move();
-				if (isProjHittingEnemy(p)) {
-					p.setActive(false);
-					if (p.getProjectileType() == BOMB) {
-						explosions.add(new Explosion(p.getPos()));
-						explodeOnEnemies(p);
-					}
-				} else if (isProjOutsideBounds(p)) {
-					p.setActive(false);
+	public void update(){
+		updateProjectiles();
+		updateExplosions();
+		cleanupEntities();
+	}
+
+	private void updateProjectiles() {
+		Iterator<Projectile> projectileIterator = projectiles.iterator();
+		while (projectileIterator.hasNext()) {
+			Projectile p = projectileIterator.next();
+			if (!p.isActive()) {
+				projectileIterator.remove();
+				continue;
+			}
+
+			p.move();
+
+			if (isProjHittingEnemy(p) || isProjOutsideBounds(p)) {
+				p.setActive(false);
+				if (p.getProjectileType() == BOMB) {
+					explosions.add(new Explosion(p.getPos()));
+					explodeOnEnemies(p); // Ensure this is called for bomb-type projectiles
+
 				}
+			} else if (isProjOutsideBounds(p)) {
+				p.setActive(false);
+				projectileIterator.remove(); // Clean up projectiles outside bounds
 			}
 		}
+	}
 
-		for (Explosion e : explosions) {
-			if (e.getIndex() < 7) {
-				e.update();
+	private void updateExplosions() {
+		Iterator<Explosion> explosionIterator = explosions.iterator();
+		while (explosionIterator.hasNext()) {
+			Explosion e = explosionIterator.next();
+			e.update();
+			if (e.getIndex() >= 7) {
+				explosionIterator.remove();
 			}
 		}
+	}
 
+	private void cleanupEntities() {
+		projectiles.removeIf(p -> !p.isActive());
+		explosions.removeIf(e -> e.getIndex() >= 7);
 	}
 
 	private void explodeOnEnemies(Projectile p) {
