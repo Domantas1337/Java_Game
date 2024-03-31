@@ -135,6 +135,7 @@ public class Playing extends GameScene implements SceneMethods {
 		for (int y = 0; y < tilesY; y++) {
 			for (int x = 0; x < tilesX; x++) {
 				int id = lvl[y][x];
+
 				if (id == 3 || id == 4 || id == 5) {
 					sprite = defaultSprite;
 				} else{

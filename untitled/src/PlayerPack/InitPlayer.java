@@ -122,51 +122,54 @@ public class InitPlayer extends Entity{
 	private void updatePos() {
 		moving = false;
 
-		if (jump)
-			jump();
-		if (!left && !right && !inAir)
-			return;
+		// Handle jump logic.
+		if (jump) jump();
 
+		// Determine horizontal speed based on input.
 		float xSpeed = 0;
+		if (left) xSpeed -= playerSpeed;
+		if (right) xSpeed += playerSpeed;
 
-		if (left)
-			xSpeed -= playerSpeed;
-		if (right)
-			xSpeed += playerSpeed;
-
-		if (!inAir) {
-			if (!IsEntityOnFloor(hitbox, lvl)) {
-				inAir = true;
-			}
+		// Update in-air status if not on the floor.
+		if (!IsEntityOnFloor(hitbox, lvl)) {
+			inAir = true;
 		}
 
 		if (inAir) {
+			// Attempt vertical movement.
 			if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvl)) {
 				hitbox.y += airSpeed;
 				airSpeed += gravity;
-				updateXPos(xSpeed);
 			} else {
+				// Correct position upon collision and adjust airSpeed based on collision direction.
 				hitbox.y = GetEntityYPosUnderRoofOrAboveFloor(hitbox, airSpeed);
-				if (airSpeed > 0) {
-					resetInAir();
-				}
-				else {
-					airSpeed = fallSpeedAfterCollision;
-				}
-				updateXPos(xSpeed);
+				airSpeed = airSpeed > 0 ? 0 : fallSpeedAfterCollision; // Reset or set to collision fall speed.
+				resetInAirIfNeeded();
 			}
+		}
 
-		} else
+		// Update horizontal position if there's horizontal movement, or player is in air.
+		if (xSpeed != 0 || inAir) {
 			updateXPos(xSpeed);
-		moving = true;
+			moving = true;
+		}
 	}
 
 	private void jump() {
-		if (inAir)
-			return;
-		inAir = true;
-		airSpeed = jumpSpeed;
+		if (!inAir) {
+			inAir = true;
+			airSpeed = jumpSpeed;
+		}
 	}
+
+	private void resetInAirIfNeeded() {
+		// Implement logic to reset `inAir` based on conditions not visible in the original snippet,
+		// for example, if airSpeed has been reset to 0 indicating landing.
+		if (airSpeed == 0) {
+			inAir = false;
+		}
+	}
+
 
 	private void resetInAir() {
 		inAir = false;
