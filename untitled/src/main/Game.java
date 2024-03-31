@@ -83,36 +83,43 @@ public class Game extends JFrame implements Runnable {
 
 	@Override
 	public void run() {
-
-		double timePerFrame = 1000000000.0 / FPS_SET;
-		double timePerUpdate = 1000000000.0 / UPS_SET;
-
-		long lastFrame = System.nanoTime();
-		long lastUpdate = System.nanoTime();
+		final long nanoSecondsPerSecond = 1000000000;
+		long lastTime = System.nanoTime();
+		double nsPerTick = nanoSecondsPerSecond / UPS_SET;
+		double nsPerFrame = nanoSecondsPerSecond / FPS_SET;
+		double deltaU = 0;
+		double deltaF = 0;
 
 		int frames = 0;
 		int updates = 0;
-
-		long now;
+		long lastTimer = System.currentTimeMillis();
 
 		while (true) {
-			now = System.nanoTime();
+			long now = System.nanoTime();
+			deltaU += (now - lastTime) / nsPerTick;
+			deltaF += (now - lastTime) / nsPerFrame;
+			lastTime = now;
 
-			if (now - lastFrame >= timePerFrame) {
-				repaint();
-				lastFrame = now;
-				frames++;
-			}
-
-			if (now - lastUpdate >= timePerUpdate) {
+			while (deltaU >= 1) {
 				updateGame();
-				lastUpdate = now;
 				updates++;
+				deltaU--;
 			}
 
-		}
+			while (deltaF >= 1) {
+				repaint();
+				frames++;
+				deltaF--;
+			}
 
+			if (System.currentTimeMillis() - lastTimer > 1000) {
+				lastTimer += 1000;
+				frames = 0;
+				updates = 0;
+			}
+		}
 	}
+
 
 	public Render getRender() {
 		return render;

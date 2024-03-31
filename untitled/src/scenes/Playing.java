@@ -45,11 +45,9 @@ public class Playing extends GameScene implements SceneMethods {
 		for (int j = 0; j < Game.GAME_WIDTH / 32; j++){
 			for (int i = 0; i < 20; i++) {
 				if(ID[i][j] == 4){
-					System.out.println(5);
 					towerManager.addTower(new Tower(0, 0, -1, Constants.Towers.CANNON), j*32, i*32);
 				}
 				if(ID[i][j] == 5 ){
-					System.out.println(6);
 					towerManager.addTower(new Tower(0, 0, -1, Constants.Towers.ARCHER), j*32, i*32);
 				}
 			}

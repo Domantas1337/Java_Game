@@ -80,7 +80,6 @@ public class ProjectileManager {
 			ySpeed = 0;
 		}
 		if (type == BOMB) {
-		System.out.println("yes");
 			xSpeed = 0;
 			ySpeed = helpClass.Constants.Projectiles.GetSpeed(type);
 		}

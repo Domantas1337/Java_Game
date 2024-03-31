@@ -80,13 +80,9 @@ public class InitPlayer extends Entity{
 	}
 
 	private void updateAnimationTick() {
-		aniTick++;
-		if (aniTick >= aniSpeed) {
+		if (++aniTick >= aniSpeed) {
 			aniTick = 0;
-			aniIndex++;
-			if (aniIndex >= GetSpriteAmount(playerAction)) {
-				aniIndex = 0;
-			}
+			aniIndex = (aniIndex + 1) % GetSpriteAmount(playerAction);
 		}
 	}
 
@@ -213,7 +209,6 @@ public class InitPlayer extends Entity{
 	}
 
 	public void setlvl(){
-		System.out.println(Constants.levelFiles.getFile());
 		lvl = LoadSave.GetLevelData(Constants.levelFiles.getFile());
 	}
 
