@@ -218,6 +218,10 @@ public class InitPlayer extends Entity{
 		lvl = LoadSave.GetLevelData(Constants.levelFiles.getFile());
 	}
 
+	public int[][] getlvl(){
+		return lvl;
+	}
+
 	public void setLeft(boolean left) {
 		this.left = left;
 	}

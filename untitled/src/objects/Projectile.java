@@ -9,7 +9,10 @@ public class Projectile {
 	private float xSpeed, ySpeed, rotation;
 	private boolean active = true;
 
+	private float posX, posY;
 	public Projectile(float x, float y, float xSpeed, float ySpeed, int dmg, float rotation, int id, int projectileType) {
+		posX = x;
+		posY = y;
 		pos = new Point2D.Float(x, y);
 		this.xSpeed = xSpeed;
 		this.ySpeed = ySpeed;
@@ -56,4 +59,15 @@ public class Projectile {
 	public float getRotation() {
 		return rotation;
 	}
+
+
+	public float getX() {
+		return posX;
+	}
+
+	public float getY() {
+		return posY;
+	}
+
+
 }

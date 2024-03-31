@@ -20,6 +20,7 @@ import javax.imageio.ImageIO;
 
 import static helpClass.Constants.Towers.*;
 import static helpClass.Constants.Projectiles.*;
+import static helpClass.collision.IsSolid;
 
 public class ProjectileManager {
 
@@ -30,12 +31,14 @@ public class ProjectileManager {
 	private ArrayList<Explosion> explosions = new ArrayList<>();
 	private BufferedImage[] proj_imgs, explo_imgs;
 	private int proj_id = 0;
+	private int lvlData[][];
 
 	public ProjectileManager(Playing playing, InitPlayer player) {
 		this.playing = playing;
 		this.player = player;
 		getProjectileImage();
 		importImgs();
+		lvlData = player.getlvl();
 	}
 
 	private void getProjectileImage() {
@@ -148,6 +151,7 @@ public class ProjectileManager {
 			}
 		}
 	}
+
 
 	private void updateExplosions() {
 		Iterator<Explosion> explosionIterator = explosions.iterator();

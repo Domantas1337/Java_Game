@@ -13,7 +13,7 @@ public class collision {
 				IsSolid(x + width, y + height, lvlData));
 	}
 
-	private static boolean IsSolid(float x, float y, int[][] lvlData) {
+	public static boolean IsSolid(float x, float y, int[][] lvlData) {
 		if (x < 0 || x >= Game.GAME_WIDTH || y < 0 || y >= Game.GAME_HEIGHT)
 			return true;
 
