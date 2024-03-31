@@ -21,6 +21,7 @@ import static helpClass.Constants.Projectiles.*;
 
 public class ProjectileManager {
 
+	private BufferedImage projectileImage = null;
 	private Playing playing;
 	private InitPlayer player;
 	private ArrayList<Projectile> projectiles = new ArrayList<>();
@@ -31,29 +32,27 @@ public class ProjectileManager {
 	public ProjectileManager(Playing playing, InitPlayer player) {
 		this.playing = playing;
 		this.player = player;
+		getProjectileImage();
 		importImgs();
 	}
 
-	private BufferedImage getProjectileImage() {
-		BufferedImage img = null;
+	private void getProjectileImage() {
 		InputStream is = LoadSave.class.getClassLoader().getResourceAsStream("projectile.png");
 
 		try {
-			img = ImageIO.read(is);
+			projectileImage = ImageIO.read(is);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return img;
 	}
 
 	private void importImgs() {
-		BufferedImage atlas = getProjectileImage();
 		proj_imgs = new BufferedImage[3];
 
 		for (int i = 0; i < 3; i++) {
-			proj_imgs[i] = atlas.getSubimage(i * 32, 32 * 18, 32, 32);
+			proj_imgs[i] = projectileImage.getSubimage(i * 32, 32 * 18, 32, 32);
 		}
-		importExplosion(atlas);
+		importExplosion(projectileImage);
 	}
 
 	private void importExplosion(BufferedImage atlas) {
